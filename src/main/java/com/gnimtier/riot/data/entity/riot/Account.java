@@ -26,6 +26,4 @@ public class Account {
 
     @Column(name = "tagLine", nullable = false)
     private String tagLine;
-
-    private LocalDateTime lastModifiedDate;
 }

@@ -16,10 +16,31 @@ public class RiotAsiaApiClient {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${riot.api.key}")
-    private String apiKey;
+    String apiKey;
 
     public RiotAsiaApiClient(WebClient webClient) {
         this.webClient = webClient;
+    }
+
+    public AccountDto getAccountByPuuid(String puuid) {
+        try {
+            AccountDto response = webClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .scheme("https")
+                            .host(RiotApiConstants.ASIA_BASE_URL)
+                            .path(RiotApiConstants.ACCOUNTS_BY_PUUID + puuid)
+                            .queryParam("api_key", apiKey)
+                            .build()
+                    )
+                    .retrieve()
+                    .bodyToMono(AccountDto.class)
+                    .block();
+            return response;
+        } catch (WebClientResponseException e) {
+            logger.error("RIOT API (get ACCOUNT) : {} - {}", e.getStatusCode(), e.getResponseBodyAsString());
+            throw e;
+        }
     }
 
     public AccountDto getAccountByGameName(String gameName, String tagLine) {

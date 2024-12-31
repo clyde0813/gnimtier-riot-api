@@ -17,7 +17,7 @@ public class SummonerServiceImpl implements SummonerService {
 //
 //    }
     @Override
-    public SummonerResponseDto getSummonerByGameName(String gameName, String tagLine){
+    public SummonerResponseDto getByGameName(String gameName, String tagLine){
 
         return new SummonerResponseDto();
     }

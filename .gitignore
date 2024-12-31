@@ -38,3 +38,4 @@ out/
 logs/
 *.log
 *.properties
+*.DS_Store
