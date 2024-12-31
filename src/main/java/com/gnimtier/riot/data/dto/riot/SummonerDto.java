@@ -10,11 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SummonerDto {
-    private String id;
     private String accountId;
-    private String name;
     private String profileIconId;
     private Long revisionDate;
+    private String id;
+    private String puuid;
     private Long summonerLevel;
-    private AccountDto account;
 }

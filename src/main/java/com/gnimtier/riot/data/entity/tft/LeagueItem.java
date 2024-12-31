@@ -4,6 +4,29 @@ import com.gnimtier.riot.data.entity.riot.Summoner;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Represents a League Item entity in the context of Teamfight Tactics (TFT).
+ * This entity stores data related to a summoner's rank and performance within a particular league.
+ * It is associated with summoners, leagues, and contains detailed attributes such as rank,
+ * points, wins, losses, and activity status.
+ *
+ * The LeagueItem class serves as a persisted representation of Riot's LeagueEntry concepts,
+ * enabling database operations and integrations.
+ *
+ * Attributes:
+ * - id: A unique identifier for the LeagueItem entry.
+ * - league: The league in which the summoner participates, tied to tier, queue types, and league metadata.
+ * - rank: The summoner's numerical rank within the league.
+ * - summoner: The associated summoner whose data is captured by this entity.
+ * - leaguePoints: The number of points the summoner has in the league.
+ * - wins: The total number of wins achieved by the summoner in the league.
+ * - losses: The total number of losses incurred by the summoner in the league.
+ * - veteran: Indicates whether the summoner is a veteran in the league.
+ * - inactive: Indicates whether the summoner is currently inactive.
+ * - freshBlood: Indicates whether the summoner is a new player in the league.
+ * - hotStreak: Indicates whether the summoner is currently on a win streak.
+ * - createDate: A timestamp used for record-keeping purposes.
+ */
 @Entity
 @Builder
 @Data

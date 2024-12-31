@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Deprecated
 @Component
 public class AccountDAOImpl implements AccountDAO {
 
@@ -20,9 +21,8 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public Account insertAccount(Account account) {
-        Account savedAccount = accountRepository.save(account);
 
-        return savedAccount;
+        return accountRepository.save(account);
     }
 
     @Override
@@ -31,4 +31,5 @@ public class AccountDAOImpl implements AccountDAO {
 
         return selectedAccount;
     }
+
 }

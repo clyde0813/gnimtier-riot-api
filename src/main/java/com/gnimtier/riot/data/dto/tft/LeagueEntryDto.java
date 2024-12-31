@@ -1,6 +1,5 @@
 package com.gnimtier.riot.data.dto.tft;
 
-import com.gnimtier.riot.data.dto.riot.SummonerDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,15 +9,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LeagueItemDto {
-    private LeagueDto league;
-    private int rank;
-    private SummonerDto summoner;
+public class LeagueEntryDto {
+    private String puuid;
+    private String leagueId;
+    private String SummonerId;
+    private String queueType;
+    private int ratedRating;
+    private String tier;
+    private String rank;
     private int leaguePoints;
     private int wins;
     private int losses;
+    private boolean hotStreak;
     private boolean veteran;
     private boolean inactive;
     private boolean freshBlood;
-    private boolean hotStreak;
 }
