@@ -21,32 +21,43 @@ public class AccountServiceImpl implements AccountService {
         this.riotAsiaApiClient = riotAsiaApiClient;
     }
 
+    private AccountDto entityToDto(Account account) {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setPuuid(account.getPuuid());
+        accountDto.setGameName(account.getGameName());
+        accountDto.setTagLine(account.getTagLine());
+        return accountDto;
+    }
+
+    private Account dtoToSaveEntity(AccountDto accountDto) {
+        Account newAccount = new Account();
+        newAccount.setPuuid(accountDto.getPuuid());
+        newAccount.setGameName(accountDto.getGameName());
+        newAccount.setTagLine(accountDto.getTagLine());
+        return accountRepository.save(newAccount);
+    }
+
     @Override
-    public AccountDto getByPuuid(String puuid){
+    public AccountDto getByPuuid(String puuid) {
         Optional<Account> selectedAccount = accountRepository.findByPuuid(puuid);
-        if(selectedAccount.isPresent()){
-            AccountDto accountDto = new AccountDto();
-            accountDto.setPuuid(selectedAccount.get().getPuuid());
-            accountDto.setGameName(selectedAccount.get().getGameName());
-            accountDto.setTagLine(selectedAccount.get().getTagLine());
-            return accountDto;
+        if (selectedAccount.isPresent()) {
+            return entityToDto(selectedAccount.get());
         } else {
-            AccountDto apiResponseAccount =  riotAsiaApiClient.getAccountByPuuid(puuid);
-            Account newAccount = new Account();
-            newAccount.setPuuid(puuid);
-            newAccount.setGameName(apiResponseAccount.getGameName());
-            newAccount.setTagLine(apiResponseAccount.getTagLine());
-            accountRepository.save(newAccount);
-            AccountDto accountDto = new AccountDto();
-            accountDto.setPuuid(puuid);
-            accountDto.setGameName(apiResponseAccount.getGameName());
-            accountDto.setTagLine(apiResponseAccount.getTagLine());
-            return accountDto;
+            AccountDto apiResponseAccount = riotAsiaApiClient.getAccountByPuuid(puuid);
+            Account account = dtoToSaveEntity(apiResponseAccount);
+            return entityToDto(account);
         }
     }
 
-//    @Override
-//    public getByGameNameAndTagLine(String gameName, String tagLine){
-//
-//    }
+    @Override
+    public AccountDto getByGameNameAndTagLine(String gameName, String tagLine) {
+        Optional<Account> selectedAccount = accountRepository.findByGameNameAndTagLine(gameName, tagLine);
+        if (selectedAccount.isPresent()) {
+            return entityToDto(selectedAccount.get());
+        } else {
+            AccountDto apiResponseAccount = riotAsiaApiClient.getAccountByGameName(gameName, tagLine);
+            Account account = dtoToSaveEntity(apiResponseAccount);
+            return entityToDto(account);
+        }
+    }
 }

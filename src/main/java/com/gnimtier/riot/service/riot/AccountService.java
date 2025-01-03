@@ -5,4 +5,5 @@ import com.gnimtier.riot.data.entity.riot.Account;
 
 public interface AccountService {
     AccountDto getByPuuid(String puuid);
+    AccountDto getByGameNameAndTagLine(String gameName, String tagLine);
 }
