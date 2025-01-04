@@ -6,6 +6,7 @@ import com.gnimtier.riot.data.dto.riot.SummonerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -20,6 +21,10 @@ public class RiotAsiaApiClient {
 
     public RiotAsiaApiClient(WebClient webClient) {
         this.webClient = webClient;
+    }
+
+    private void logError(String where, HttpStatusCode statusCode, String message) {
+        logger.error("{}: {}: {}", where, statusCode, message);
     }
 
     public AccountDto getAccountByPuuid(String puuid) {
@@ -38,7 +43,7 @@ public class RiotAsiaApiClient {
                     .block();
             return response;
         } catch (WebClientResponseException e) {
-            logger.error("RIOT API (get ACCOUNT) : {} - {}", e.getStatusCode(), e.getResponseBodyAsString());
+            logError("RiotAsiaAPiClient - getAccountByPuuid", e.getStatusCode(), e.getMessage());
             throw e;
         }
     }
@@ -59,7 +64,7 @@ public class RiotAsiaApiClient {
                     .block();
             return response;
         } catch (WebClientResponseException e) {
-            logger.error("RIOT API (get ACCOUNT) : {} - {}", e.getStatusCode(), e.getResponseBodyAsString());
+            logError("RiotAsiaAPiClient - getAccountByGameName", e.getStatusCode(), e.getMessage());
             throw e;
         }
     }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SummonerDto {
     private String accountId;
-    private String profileIconId;
+    private int profileIconId;
     private Long revisionDate;
     private String id;
     private String puuid;

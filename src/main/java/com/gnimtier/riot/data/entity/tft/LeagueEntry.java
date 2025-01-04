@@ -9,10 +9,10 @@ import lombok.*;
  * This entity stores data related to a summoner's rank and performance within a particular league.
  * It is associated with summoners, leagues, and contains detailed attributes such as rank,
  * points, wins, losses, and activity status.
- *
+ * <p>
  * The LeagueItem class serves as a persisted representation of Riot's LeagueEntry concepts,
  * enabling database operations and integrations.
- *
+ * <p>
  * Attributes:
  * - id: A unique identifier for the LeagueItem entry.
  * - league: The league in which the summoner participates, tied to tier, queue types, and league metadata.
@@ -32,24 +32,27 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tft_league_item")
-public class LeagueItem {
+@Table(name = "tft_league_entry")
+public class LeagueEntry {
     //LeagueEntry - 라이엇에서 식별가능한 키를 제공하지 않음
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*
-    //puuid - summoner 참조로 인하여 불필요
-    @ManyToOne
-    @JoinColumn(name = "account_puuid")
-    private Account account;
-    */
-
     //leagueID - tier, leagueId, queue, name
     @ManyToOne
     @JoinColumn(name = "tft_league_id")
     private League league;
+
+//    //queuetype
+//    @ManyToOne
+//    @JoinColumn(name = "tft_queue_type_name")
+//    private QueueType queueType;
+
+//    //tier
+//    @ManyToOne
+//    @JoinColumn(name = "tft_tier_name")
+//    private Tier tier;
 
     //rank
     @Column(name = "rank")
@@ -74,24 +77,24 @@ public class LeagueItem {
 
     //veteran
     @Column(name = "veteran")
-    private boolean veteran;
+    private Boolean veteran;
 
     //inactive
     @Column(name = "inactive")
-    private boolean inactive;
+    private Boolean inactive;
 
 
     //freshBlood
     @Column(name = "fresh_blood")
-    private boolean freshBlood;
+    private Boolean freshBlood;
 
     //hotSteak
     @Column(name = "hot_streak")
-    private boolean hotStreak;
+    private Boolean hotStreak;
 
-    //기록용
-    @Column(name = "create_date")
-    private long createDate;
+//    //기록용
+//    @Column(name = "create_date")
+//    private long createDate;
 }
 
 /*

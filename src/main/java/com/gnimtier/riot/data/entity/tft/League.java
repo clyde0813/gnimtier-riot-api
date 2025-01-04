@@ -1,5 +1,6 @@
 package com.gnimtier.riot.data.entity.tft;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,6 @@ public class League {
     @JoinColumn(name = "tft_queue_type_name")
     private QueueType queueType;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = true)
     private String name;
 }

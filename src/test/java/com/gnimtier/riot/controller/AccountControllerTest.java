@@ -20,9 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AccountController.class)
 public class AccountControllerTest {
-    private String puuid = "-QNQEnPe-97RbBrjZZr8vTSvbInXKxZoIA74yy2enMAC7t7DxKvUCuN67YzXtodUeXmg7eKpEJCBgw";
-    private String gameName = "Hide on bush";
-    private String tagLine = "KR1";
+    private final String puuid = "-QNQEnPe-97RbBrjZZr8vTSvbInXKxZoIA74yy2enMAC7t7DxKvUCuN67YzXtodUeXmg7eKpEJCBgw";
+    private final String gameName = "Hide on bush";
+    private final String tagLine = "KR1";
     @Autowired
     private MockMvc mockMvc;
 

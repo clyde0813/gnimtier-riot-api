@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LeagueEntryResponseDto {
     private int leaguePoints;
-    private String rank;
+    private int rank;
     private int wins;
     private int losses;
     private Boolean veteran;

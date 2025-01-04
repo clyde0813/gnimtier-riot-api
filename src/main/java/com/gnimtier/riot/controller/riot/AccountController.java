@@ -21,13 +21,11 @@ public class AccountController {
 
     @GetMapping("/by-puuid/{puuid}")
     public AccountDto getByPuuid(@PathVariable("puuid") String puuid) {
-        AccountDto responseAccount = accountService.getByPuuid(puuid);
-        return responseAccount;
+        return accountService.getByPuuid(puuid);
     }
 
     @GetMapping("/by-riot-id/{gameName}/{tagLine}")
     public AccountDto getByGameNameAndTagLine(@PathVariable("gameName") String gameName, @PathVariable("tagLine") String tagLine) {
-        AccountDto responseAccount = accountService.getByGameNameAndTagLine(gameName, tagLine);
-        return responseAccount;
+        return accountService.getByGameNameAndTagLine(gameName, tagLine);
     }
 }

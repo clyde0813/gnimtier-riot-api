@@ -1,7 +1,5 @@
 package com.gnimtier.riot.data.dto.tft;
 
-import com.gnimtier.riot.data.dto.riot.SummonerDto;
-import com.gnimtier.riot.data.entity.tft.Tier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -20,8 +20,8 @@ public class LeagueEntryDto {
     private int leaguePoints;
     private int wins;
     private int losses;
-    private boolean hotStreak;
-    private boolean veteran;
-    private boolean inactive;
-    private boolean freshBlood;
+    private Boolean hotStreak;
+    private Boolean veteran;
+    private Boolean inactive;
+    private Boolean freshBlood;
 }

@@ -21,7 +21,7 @@ public class AccountServiceImpl implements AccountService {
         this.riotAsiaApiClient = riotAsiaApiClient;
     }
 
-    private AccountDto entityToDto(Account account) {
+    public AccountDto entityToDto(Account account) {
         AccountDto accountDto = new AccountDto();
         accountDto.setPuuid(account.getPuuid());
         accountDto.setGameName(account.getGameName());
