@@ -1,7 +1,7 @@
-package com.gnimtier.riot.controller.riot;
+package com.gnimtier.riot.controller.tft;
 
-import com.gnimtier.riot.data.dto.riot.response.SummonerResponseDto;
-import com.gnimtier.riot.service.riot.SummonerService;
+import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
+import com.gnimtier.riot.service.tft.SummonerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,13 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/summoners")
+@RequestMapping("/tft/summoners")
 public class SummonerV1Controller {
     private final SummonerService summonerService;
 
     @Autowired
     public SummonerV1Controller(SummonerService summonerService) {
         this.summonerService = summonerService;
+    }
+
+    @GetMapping("/by-puuid/{puuid}")
+    public SummonerResponseDto getSummonerByPuuid(@PathVariable("puuid") String puuid) {
+        return summonerService.getByPuuid(puuid);
     }
 
     @GetMapping("/by-riot-id/{gameName}/{tagLine}")

@@ -1,15 +1,18 @@
 package com.gnimtier.riot.controller;
 
-import com.gnimtier.riot.controller.riot.SummonerV1Controller;
-import com.gnimtier.riot.data.dto.tft.response.EntryDto;
-import com.gnimtier.riot.data.dto.riot.response.SummonerResponseDto;
-import com.gnimtier.riot.service.riot.SummonerService;
+import com.gnimtier.riot.controller.tft.SummonerV1Controller;
+import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
+import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
+import com.gnimtier.riot.service.tft.SummonerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -33,6 +36,20 @@ public class SummonerV1ControllerTest {
     private SummonerService summonerService;
 
     private SummonerResponseDto createMockSummonerResponse() {
+        Map<String, LeagueEntryResponseDto> entryMap = new HashMap<>();
+        LeagueEntryResponseDto entry = new LeagueEntryResponseDto();
+        entry.setLeaguePoints(83);
+        entry.setRank(4);
+        entry.setWins(36);
+        entry.setLosses(15);
+        entry.setVeteran(false);
+        entry.setInactive(false);
+        entry.setFreshBlood(false);
+        entry.setHotStreak(false);
+        entry.setTier(1);
+        entry.setLeagueId("41a54d91-8ed3-46c4-9978-17dbbfb9e232");
+        entry.setQueueType("RANKED_TFT");
+        entryMap.put(entry.getQueueType(), entry);
         return SummonerResponseDto.builder()
                 .puuid(puuid)
                 .gameName(gameName)
@@ -42,7 +59,7 @@ public class SummonerV1ControllerTest {
                 .profileIconId(6)
                 .revisionDate(1735925676796L)
                 .summonerLevel(788L)
-                .entry(EntryDto.builder().RANKED_ENTRY(null).build())
+                .entry(entryMap)
                 .build();
     }
 
@@ -51,12 +68,26 @@ public class SummonerV1ControllerTest {
     void getSummonerResponseByGameNameAndTagLine() throws Exception {
         SummonerResponseDto mockSummonerResponse = createMockSummonerResponse();
         given(summonerService.getByGameNameAndTagLine(gameName, tagLine)).willReturn(mockSummonerResponse);
-        mockMvc.perform(get("/tft/summoner/v1/summoners/by-puuid/by-riot-id/{gameName}/{tagLine}", gameName, tagLine))
+        mockMvc.perform(get("/tft/summoners/by-riot-id/{gameName}/{tagLine}", gameName, tagLine))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.gameName", equalTo(gameName)))
                 .andExpect(jsonPath("$.tagLine", equalTo(tagLine)))
                 .andExpect(jsonPath("$.puuid", equalTo(puuid)))
                 .andDo(print());
         verify(summonerService).getByGameNameAndTagLine(gameName, tagLine);
+    }
+
+    @Test
+    @DisplayName("get SummonerResponse by puuid")
+    void getSummonerResponseByPuuid() throws Exception {
+        SummonerResponseDto mockSummonerResponse = createMockSummonerResponse();
+        given(summonerService.getByPuuid(puuid)).willReturn(mockSummonerResponse);
+        mockMvc.perform(get("/tft/summoners/by-puuid/{puuid}", puuid))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.gameName", equalTo(gameName)))
+                .andExpect(jsonPath("$.tagLine", equalTo(tagLine)))
+                .andExpect(jsonPath("$.puuid", equalTo(puuid)))
+                .andDo(print());
+        verify(summonerService).getByPuuid(puuid);
     }
 }

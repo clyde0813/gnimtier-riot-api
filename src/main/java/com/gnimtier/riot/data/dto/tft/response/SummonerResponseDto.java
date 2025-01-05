@@ -1,8 +1,6 @@
-package com.gnimtier.riot.data.dto.riot.response;
+package com.gnimtier.riot.data.dto.tft.response;
 
 import com.gnimtier.riot.data.dto.riot.AccountDto;
-import com.gnimtier.riot.data.dto.tft.response.EntryDto;
-import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

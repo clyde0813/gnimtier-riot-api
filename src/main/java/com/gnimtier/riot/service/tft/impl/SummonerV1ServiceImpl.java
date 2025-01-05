@@ -1,16 +1,15 @@
-package com.gnimtier.riot.service.riot.impl;
+package com.gnimtier.riot.service.tft.impl;
 
 import com.gnimtier.riot.client.RiotKrApiClient;
 import com.gnimtier.riot.data.dto.riot.AccountDto;
 import com.gnimtier.riot.data.dto.riot.SummonerDto;
-import com.gnimtier.riot.data.dto.tft.response.EntryDto;
-import com.gnimtier.riot.data.dto.riot.response.SummonerResponseDto;
+import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
+import com.gnimtier.riot.data.entity.riot.Account;
 import com.gnimtier.riot.data.entity.riot.Summoner;
 import com.gnimtier.riot.data.repository.riot.AccountRepository;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;
 import com.gnimtier.riot.service.riot.AccountService;
-import com.gnimtier.riot.service.riot.SummonerService;
-import com.gnimtier.riot.service.tft.impl.LeagueV1ServiceImpl;
+import com.gnimtier.riot.service.tft.SummonerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +59,7 @@ public class SummonerV1ServiceImpl implements SummonerService {
     }
 
 
-    private SummonerResponseDto getSummonerResponseDto(AccountDto accountDto, SummonerDto summonerDto) {
+    public SummonerResponseDto getSummonerResponseDto(AccountDto accountDto, SummonerDto summonerDto) {
         SummonerResponseDto responseDto = new SummonerResponseDto();
         responseDto.setPuuid(accountDto.getPuuid());
         responseDto.setGameName(accountDto.getGameName());
@@ -74,9 +73,21 @@ public class SummonerV1ServiceImpl implements SummonerService {
         return responseDto;
     }
 
-    @Override
-    public SummonerResponseDto getByGameNameAndTagLine(String gameName, String tagLine) {
-        AccountDto accountDto = accountService.getByGameNameAndTagLine(gameName, tagLine);
+    public SummonerResponseDto getSummonerResponseDto(Summoner summoner) {
+        SummonerResponseDto responseDto = new SummonerResponseDto();
+        responseDto.setPuuid(summoner.getAccount().getPuuid());
+        responseDto.setGameName(summoner.getAccount().getGameName());
+        responseDto.setTagLine(summoner.getAccount().getTagLine());
+        responseDto.setId(summoner.getId());
+        responseDto.setAccountId(summoner.getAccountId());
+        responseDto.setProfileIconId(summoner.getProfileIconId());
+        responseDto.setRevisionDate(summoner.getRevisionDate());
+        responseDto.setSummonerLevel(summoner.getSummonerLevel());
+        responseDto.setEntry(leagueV1Service.getBySummonerId(summoner.getId()));
+        return responseDto;
+    }
+
+    private SummonerResponseDto summonerResponseDtoFromAccountDto(AccountDto accountDto) {
         Optional<Summoner> selectedSummoner = summonerRepository.findByAccountPuuid(accountDto.getPuuid());
         if (selectedSummoner.isEmpty()) {
             SummonerDto apiResponseSummoner = riotKrApiClient.getSummonerByPuuid(accountDto.getPuuid());
@@ -84,5 +95,17 @@ public class SummonerV1ServiceImpl implements SummonerService {
         }
         SummonerDto summonerDto = entityToDto(selectedSummoner.get());
         return getSummonerResponseDto(accountDto, summonerDto);
+    }
+
+    @Override
+    public SummonerResponseDto getByPuuid(String puuid) {
+        AccountDto accountDto = accountService.getByPuuid(puuid);
+        return summonerResponseDtoFromAccountDto(accountDto);
+    }
+
+    @Override
+    public SummonerResponseDto getByGameNameAndTagLine(String gameName, String tagLine) {
+        AccountDto accountDto = accountService.getByGameNameAndTagLine(gameName, tagLine);
+        return summonerResponseDtoFromAccountDto(accountDto);
     }
 }

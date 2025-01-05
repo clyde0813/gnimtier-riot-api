@@ -7,13 +7,10 @@ import com.gnimtier.riot.data.entity.riot.Summoner;
 import com.gnimtier.riot.data.entity.tft.League;
 import com.gnimtier.riot.data.entity.tft.LeagueEntry;
 import com.gnimtier.riot.data.entity.tft.QueueType;
-import com.gnimtier.riot.data.entity.tft.Tier;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;
 import com.gnimtier.riot.data.repository.tft.LeagueEntryRepository;
 import com.gnimtier.riot.data.repository.tft.LeagueRepository;
 import com.gnimtier.riot.data.repository.tft.QueueTypeRepository;
-import com.gnimtier.riot.data.repository.tft.TierRepository;
-import com.gnimtier.riot.service.riot.SummonerService;
 import com.gnimtier.riot.service.tft.LeagueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +23,6 @@ import java.util.*;
 public class LeagueV1ServiceImpl implements LeagueService {
     private final RiotKrApiClient riotKrApiClient;
     private final SummonerRepository summonerRepository;
-    private final TierRepository tierRepository;
     private final LeagueRepository leagueRepository;
     private final QueueTypeRepository queueTypeRepository;
     private final LeagueEntryRepository leagueEntryRepository;
@@ -34,13 +30,28 @@ public class LeagueV1ServiceImpl implements LeagueService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public LeagueV1ServiceImpl(SummonerRepository summonerRepository, TierRepository tierRepository, LeagueEntryRepository leagueItemRepository, RiotKrApiClient riotKrApiClient, LeagueRepository leagueRepository, QueueTypeRepository queueTypeRepository, LeagueEntryRepository leagueEntryRepository) {
+    public LeagueV1ServiceImpl(SummonerRepository summonerRepository, LeagueEntryRepository leagueItemRepository, RiotKrApiClient riotKrApiClient, LeagueRepository leagueRepository, QueueTypeRepository queueTypeRepository, LeagueEntryRepository leagueEntryRepository) {
         this.riotKrApiClient = riotKrApiClient;
         this.summonerRepository = summonerRepository;
-        this.tierRepository = tierRepository;
         this.leagueRepository = leagueRepository;
         this.queueTypeRepository = queueTypeRepository;
         this.leagueEntryRepository = leagueEntryRepository;
+    }
+
+    private int tierToInt(String tier) {
+        return switch (tier) {
+            case "CHALLENGER" -> 1;
+            case "GRANDMASTER" -> 2;
+            case "MASTER" -> 3;
+            case "DIAMOND" -> 4;
+            case "EMERALD" -> 5;
+            case "PLATINUM" -> 6;
+            case "GOLD" -> 7;
+            case "SILVER" -> 8;
+            case "BRONZE" -> 9;
+            case "IRON" -> 10;
+            case null, default -> 0;
+        };
     }
 
     private int romanToInt(String roman) {
@@ -59,15 +70,9 @@ public class LeagueV1ServiceImpl implements LeagueService {
     }
 
     private LeagueEntry dtoToEntity(LeagueEntryDto leagueEntryDto) {
-        Optional<Tier> tier = tierRepository.findByName(leagueEntryDto.getTier());
         Optional<QueueType> queueType = queueTypeRepository.findByName(leagueEntryDto.getQueueType());
         Optional<League> league = leagueRepository.findById(leagueEntryDto.getLeagueId());
         Optional<Summoner> summoner = summonerRepository.findById(leagueEntryDto.getSummonerId());
-        if (tier.isEmpty()) {
-            Tier newTier = new Tier();
-            newTier.setName(leagueEntryDto.getTier());
-            tier = Optional.of(tierRepository.save(newTier));
-        }
         if (queueType.isEmpty()) {
             QueueType newQueueType = new QueueType();
             newQueueType.setName(leagueEntryDto.getQueueType());
@@ -76,7 +81,7 @@ public class LeagueV1ServiceImpl implements LeagueService {
         if (league.isEmpty()) {
             League newLeague = new League();
             newLeague.setId(leagueEntryDto.getLeagueId());
-            newLeague.setTier(tier.get());
+            newLeague.setTier(tierToInt(leagueEntryDto.getTier()));
             newLeague.setQueueType(queueType.get());
             league = Optional.of(leagueRepository.save(newLeague));
         }
@@ -103,7 +108,7 @@ public class LeagueV1ServiceImpl implements LeagueService {
         responseDto.setVeteran(leagueEntry.getVeteran());
         responseDto.setFreshBlood(leagueEntry.getFreshBlood());
         responseDto.setHotStreak(leagueEntry.getHotStreak());
-        responseDto.setTier(leagueEntry.getLeague().getTier().getName());
+        responseDto.setTier(leagueEntry.getLeague().getTier());
         responseDto.setLeagueId(leagueEntry.getLeague().getId());
         responseDto.setQueueType(leagueEntry.getLeague().getQueueType().getName());
         return responseDto;

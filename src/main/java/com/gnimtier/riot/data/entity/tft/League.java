@@ -14,9 +14,8 @@ public class League {
     @Id
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "tft_tier_name")
-    private Tier tier;
+    @Column(name = "tier", nullable = false)
+    private int tier;
 
     @ManyToOne
     @JoinColumn(name = "tft_queue_type_name")

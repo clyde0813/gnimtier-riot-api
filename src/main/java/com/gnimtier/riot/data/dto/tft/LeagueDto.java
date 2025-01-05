@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class LeagueDto {
-    private TierDto tier;
+    private int tier;
     private QueueTypeDto queue;
     private String name;
 }

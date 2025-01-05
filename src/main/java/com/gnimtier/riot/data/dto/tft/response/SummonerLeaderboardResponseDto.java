@@ -5,10 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EntryDto {
-    private LeagueEntryResponseDto RANKED_ENTRY;
+public class SummonerLeaderboardResponseDto {
+    private List<SummonerResponseDto> leaderboard;
+    private int pageSize;
+    private int page;
 }
