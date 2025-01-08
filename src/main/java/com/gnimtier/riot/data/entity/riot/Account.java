@@ -19,11 +19,18 @@ import java.time.LocalDateTime;
 @Table(name = "account")
 public class Account {
     @Id
+    @Column(name = "puuid")
     private String puuid;
 
-    @Column(name = "gameName", nullable = false)
+    @Column(name = "game_name", nullable = false)
     private String gameName;
 
-    @Column(name = "tagLine", nullable = false)
+    @Column(name = "tag_line", nullable = false)
     private String tagLine;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @Column(name = "modified_date", nullable = true)
+    private LocalDateTime modifiedDate;
 }

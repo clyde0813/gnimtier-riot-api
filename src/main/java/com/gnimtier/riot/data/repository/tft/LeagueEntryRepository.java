@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface LeagueEntryRepository extends JpaRepository<LeagueEntry, Long> {
     List<LeagueEntry> findAllBySummonerId(String summonerId);
-
+    List<LeagueEntry> findAllBySummoner(Summoner summoner);
 
     @Query("""
     select l.summoner

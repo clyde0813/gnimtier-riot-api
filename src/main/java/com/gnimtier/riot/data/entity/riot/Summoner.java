@@ -16,19 +16,19 @@ public class Summoner {
     @Id
     private String id;
 
-    @Column(name = "accountId")
+    @Column(name = "account_id")
     private String accountId;
 
-    @Column(name = "profileIconId")
+    @Column(name = "profile_icon_id")
     private int profileIconId;
 
-    @Column(name = "revisionDate")
+    @Column(name = "revision_date")
     private long revisionDate;
 
-    @Column(name = "summonerLevel")
+    @Column(name = "summoner_level")
     private long summonerLevel;
 
     @OneToOne
-    @JoinColumn(name = "account_uuid")
+    @JoinColumn(name = "account_puuid")
     private Account account;
 }

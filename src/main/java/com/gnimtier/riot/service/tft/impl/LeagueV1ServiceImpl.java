@@ -69,10 +69,10 @@ public class LeagueV1ServiceImpl implements LeagueService {
         return 0;
     }
 
-    private LeagueEntry dtoToEntity(LeagueEntryDto leagueEntryDto) {
+    private LeagueEntry dtoToEntity(LeagueEntryDto leagueEntryDto, String summonerId) {
         Optional<QueueType> queueType = queueTypeRepository.findByName(leagueEntryDto.getQueueType());
         Optional<League> league = leagueRepository.findById(leagueEntryDto.getLeagueId());
-        Optional<Summoner> summoner = summonerRepository.findById(leagueEntryDto.getSummonerId());
+        Optional<Summoner> summoner = summonerRepository.findById(summonerId);
         if (queueType.isEmpty()) {
             QueueType newQueueType = new QueueType();
             newQueueType.setName(leagueEntryDto.getQueueType());
@@ -87,7 +87,6 @@ public class LeagueV1ServiceImpl implements LeagueService {
         }
         LeagueEntry newLeagueEntry = new LeagueEntry();
         newLeagueEntry.setLeague(league.get());
-//        newLeagueEntry.setTier(tier.get());
         newLeagueEntry.setRank(romanToInt(leagueEntryDto.getRank()));
         newLeagueEntry.setSummoner(summoner.get());
         newLeagueEntry.setLeaguePoints(leagueEntryDto.getLeaguePoints());
@@ -121,7 +120,7 @@ public class LeagueV1ServiceImpl implements LeagueService {
         if (selectedLeagueList.isEmpty()) {
             List<LeagueEntryDto> apiResponseLeagueEntryDtoList = riotKrApiClient.getLeagueEntryBySummonerId(summonerId);
             apiResponseLeagueEntryDtoList.forEach(leagueEntryDto -> {
-                LeagueEntryResponseDto leagueEntryResponseDto = entityToDto(dtoToEntity(leagueEntryDto));
+                LeagueEntryResponseDto leagueEntryResponseDto = entityToDto(dtoToEntity(leagueEntryDto, summonerId));
                 leagueEntryResponseDtoMap.put(leagueEntryResponseDto.getQueueType(), leagueEntryResponseDto);
             });
         } else {

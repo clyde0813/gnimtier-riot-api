@@ -39,3 +39,5 @@ logs/
 *.log
 *.properties
 *.DS_Store
+*.pem
+*.sh

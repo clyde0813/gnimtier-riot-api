@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,8 +95,12 @@ public class SummonerV1ServiceImpl implements SummonerService {
             SummonerDto apiResponseSummoner = riotKrApiClient.getSummonerByPuuid(accountDto.getPuuid());
             selectedSummoner = Optional.ofNullable(dtoToEntity(apiResponseSummoner));
         }
-        SummonerDto summonerDto = entityToDto(selectedSummoner.get());
-        return getSummonerResponseDto(accountDto, summonerDto);
+        if(selectedSummoner.isPresent()) {
+            SummonerDto summonerDto = entityToDto(selectedSummoner.get());
+            return getSummonerResponseDto(accountDto, summonerDto);
+        }
+        // 예외처리 필요 부분
+        return null;
     }
 
     @Override
@@ -104,8 +110,27 @@ public class SummonerV1ServiceImpl implements SummonerService {
     }
 
     @Override
+    public List<SummonerResponseDto> getByPuuidList(List<String> puuidList) {
+        List<SummonerResponseDto> summonerResponseDtoList = new ArrayList<>();
+        puuidList.forEach(puuidId -> {
+            AccountDto accountDto = accountService.getByPuuid(puuidId);
+            summonerResponseDtoList.add(summonerResponseDtoFromAccountDto(accountDto));
+        });
+        return summonerResponseDtoList;
+    }
+
+    @Override
     public SummonerResponseDto getByGameNameAndTagLine(String gameName, String tagLine) {
         AccountDto accountDto = accountService.getByGameNameAndTagLine(gameName, tagLine);
         return summonerResponseDtoFromAccountDto(accountDto);
+    }
+
+    @Override
+    public List<String> getByGameNameList(List<List<String>> gameNameList) {
+        List<String> puuidList = new ArrayList<>();
+        gameNameList.forEach(lst -> {
+            puuidList.add(getByGameNameAndTagLine(lst.get(0), lst.get(1)).getPuuid());
+        });
+        return puuidList;
     }
 }

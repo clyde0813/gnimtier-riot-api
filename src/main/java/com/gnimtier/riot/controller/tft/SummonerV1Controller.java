@@ -3,10 +3,9 @@ package com.gnimtier.riot.controller.tft;
 import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
 import com.gnimtier.riot.service.tft.SummonerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tft/summoners")
@@ -21,6 +20,17 @@ public class SummonerV1Controller {
     @GetMapping("/by-puuid/{puuid}")
     public SummonerResponseDto getSummonerByPuuid(@PathVariable("puuid") String puuid) {
         return summonerService.getByPuuid(puuid);
+    }
+
+    @PostMapping("/by-puuid-list")
+    public List<SummonerResponseDto> getSummonersByPuuidList(@RequestBody List<String> puuidList) {
+        return summonerService.getByPuuidList(puuidList);
+    }
+
+    //gameName, tagLine ArrayList로 한번에 다수의 계정 저장 controller
+    @PostMapping("/by-gameName-list")
+    public List<String> getSummonersByGameNameList(@RequestBody List<List<String>> gameNameList) {
+        return summonerService.getByGameNameList(gameNameList);
     }
 
     @GetMapping("/by-riot-id/{gameName}/{tagLine}")

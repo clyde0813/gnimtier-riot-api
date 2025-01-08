@@ -8,6 +8,7 @@ import com.gnimtier.riot.service.riot.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,7 @@ public class AccountServiceImpl implements AccountService {
         newAccount.setPuuid(accountDto.getPuuid());
         newAccount.setGameName(accountDto.getGameName());
         newAccount.setTagLine(accountDto.getTagLine());
+        newAccount.setCreatedDate(LocalDateTime.now());
         return accountRepository.save(newAccount);
     }
 

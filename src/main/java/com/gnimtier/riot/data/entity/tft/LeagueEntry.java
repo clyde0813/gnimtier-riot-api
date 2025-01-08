@@ -41,7 +41,7 @@ public class LeagueEntry {
 
     //leagueID - tier, leagueId, queue, name
     @ManyToOne
-    @JoinColumn(name = "tft_league_id")
+    @JoinColumn(name = "league_id")
     private League league;
 
 //    //queuetype
