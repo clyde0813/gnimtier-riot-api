@@ -4,7 +4,6 @@ import com.gnimtier.riot.client.RiotKrApiClient;
 import com.gnimtier.riot.data.dto.riot.AccountDto;
 import com.gnimtier.riot.data.dto.riot.SummonerDto;
 import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
-import com.gnimtier.riot.data.entity.riot.Account;
 import com.gnimtier.riot.data.entity.riot.Summoner;
 import com.gnimtier.riot.data.repository.riot.AccountRepository;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;

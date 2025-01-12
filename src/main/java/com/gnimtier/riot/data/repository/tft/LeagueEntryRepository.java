@@ -18,7 +18,7 @@ public interface LeagueEntryRepository extends JpaRepository<LeagueEntry, Long> 
     select l.summoner
     from LeagueEntry l
     where l.summoner.account.puuid in :puuids
-    order by l.league.tier ASC, l.rank ASC, l.leaguePoints ASC
+    order by l.league.tier ASC, l.rank ASC, l.leaguePoints DESC
 """)
     Page<Summoner> findSortedSummonersByPuuidsUsingTier(
         @Param("puuids") List<String> puuidList, Pageable pageable

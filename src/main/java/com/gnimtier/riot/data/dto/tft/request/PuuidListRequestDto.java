@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class PuuidListRequestDto {
     private List<String> puuid;
+    private String sortBy;
     private int pageSize;
     private int page;
 }
