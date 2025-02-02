@@ -1,6 +1,6 @@
 package com.gnimtier.riot.controller;
 
-import com.gnimtier.riot.controller.tft.SummonerV1Controller;
+import com.gnimtier.riot.controller.tft.SummonerController;
 import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
 import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
 import com.gnimtier.riot.service.tft.SummonerService;
@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(controllers = SummonerV1Controller.class)
-public class SummonerV1ControllerTest {
+@WebMvcTest(controllers = SummonerController.class)
+public class SummonerControllerTest {
     private final String puuid = "-QNQEnPe-97RbBrjZZr8vTSvbInXKxZoIA74yy2enMAC7t7DxKvUCuN67YzXtodUeXmg7eKpEJCBgw";
     private final String gameName = "Hide on bush";
     private final String tagLine = "KR1";
@@ -47,8 +47,6 @@ public class SummonerV1ControllerTest {
         entry.setFreshBlood(false);
         entry.setHotStreak(false);
         entry.setTier(1);
-        entry.setLeagueId("41a54d91-8ed3-46c4-9978-17dbbfb9e232");
-        entry.setQueueType("RANKED_TFT");
         entryMap.put(entry.getQueueType(), entry);
         return SummonerResponseDto.builder()
                 .puuid(puuid)

@@ -10,5 +10,5 @@ import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public interface SummonerRepository extends JpaRepository<Summoner, String> {
-    Optional<Summoner> findByAccountPuuid(String puuid);
+    Optional<Summoner> findByPuuid(String puuid);
 }

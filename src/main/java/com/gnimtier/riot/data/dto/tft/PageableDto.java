@@ -1,4 +1,4 @@
-package com.gnimtier.riot.data.dto.tft.response;
+package com.gnimtier.riot.data.dto.tft;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SummonerLeaderboardResponseDto {
-    private List<SummonerResponseDto> leaderboard;
+public class PageableDto<T> {
+    private List<T> data;
+    private String sortBy;
     private int pageSize;
     private int page;
 }

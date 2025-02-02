@@ -11,16 +11,16 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface LeagueEntryRepository extends JpaRepository<LeagueEntry, Long> {
-    List<LeagueEntry> findAllBySummonerId(String summonerId);
-    List<LeagueEntry> findAllBySummoner(Summoner summoner);
+    List<LeagueEntry> findAllByPuuid(String puuid);
 
     @Query("""
-    select l.summoner
+    select l
     from LeagueEntry l
-    where l.summoner.account.puuid in :puuids
-    order by l.league.tier ASC, l.rank ASC, l.leaguePoints DESC
+    where l.puuid in :puuids and
+    l.queueType = "RANKED_TFT"
+    order by l.tier ASC, l.rank ASC, l.leaguePoints DESC
 """)
-    Page<Summoner> findSortedSummonersByPuuidsUsingTier(
+    Page<LeagueEntry> getSortedLeagueEntryByTier(
         @Param("puuids") List<String> puuidList, Pageable pageable
     );
 }

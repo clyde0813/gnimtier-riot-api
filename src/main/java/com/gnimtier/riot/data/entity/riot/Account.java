@@ -1,5 +1,6 @@
 package com.gnimtier.riot.data.entity.riot;
 
+import com.gnimtier.riot.data.dto.riot.AccountDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -33,4 +34,12 @@ public class Account {
 
     @Column(name = "modified_date", nullable = true)
     private LocalDateTime modifiedDate;
+
+    public AccountDto toDto() {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setPuuid(this.puuid);
+        accountDto.setGameName(this.gameName);
+        accountDto.setTagLine(this.tagLine);
+        return accountDto;
+    }
 }

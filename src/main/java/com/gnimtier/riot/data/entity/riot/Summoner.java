@@ -1,5 +1,6 @@
 package com.gnimtier.riot.data.entity.riot;
 
+import com.gnimtier.riot.data.dto.riot.SummonerDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +29,17 @@ public class Summoner {
     @Column(name = "summoner_level")
     private long summonerLevel;
 
-    @OneToOne
-    @JoinColumn(name = "account_puuid")
-    private Account account;
+    @Column(name = "puuid")
+    private String puuid;
+
+    public SummonerDto toDto() {
+        SummonerDto summonerDto = new SummonerDto();
+        summonerDto.setId(id);
+        summonerDto.setAccountId(accountId);
+        summonerDto.setProfileIconId(profileIconId);
+        summonerDto.setRevisionDate(revisionDate);
+        summonerDto.setSummonerLevel(summonerLevel);
+        summonerDto.setPuuid(puuid);
+        return summonerDto;
+    }
 }
