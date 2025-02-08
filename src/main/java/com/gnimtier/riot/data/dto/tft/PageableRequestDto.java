@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PageableDto<T> {
+public class PageableRequestDto<T> {
     private List<T> data;
     private String sortBy;
     private int pageSize;

@@ -1,6 +1,7 @@
 package com.gnimtier.riot.controller.tft;
 
-import com.gnimtier.riot.data.dto.tft.PageableDto;
+import com.gnimtier.riot.data.dto.tft.PageableRequestDto;
+import com.gnimtier.riot.data.dto.tft.PageableResponseDto;
 import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
 import com.gnimtier.riot.service.tft.LeaderboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class LeaderboardController {
     }
 
     @PostMapping("/by-puuid-list")
-    public PageableDto<SummonerResponseDto> getTierLeaderboardByPuuidList(@RequestBody PageableDto<String> puuidListRequestDto) {
-        PageableDto<SummonerResponseDto> summoners;
+    public PageableResponseDto<SummonerResponseDto> getTierLeaderboardByPuuidList(@RequestBody PageableRequestDto<String> puuidListRequestDto) {
+        PageableResponseDto<SummonerResponseDto> summoners;
         switch (puuidListRequestDto.getSortBy()) {
             case "tier":
                 summoners = leaderboardService.getTierLeaderboardByPuuidList(puuidListRequestDto);
