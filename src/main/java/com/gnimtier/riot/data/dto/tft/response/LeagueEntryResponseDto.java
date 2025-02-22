@@ -19,6 +19,4 @@ public class LeagueEntryResponseDto {
     private Boolean inactive;
     private Boolean freshBlood;
     private Boolean hotStreak;
-//    private String leagueId;
-//    private String queueType;
 }

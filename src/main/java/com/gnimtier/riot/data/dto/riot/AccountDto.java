@@ -24,7 +24,6 @@ public class AccountDto {
         account.setPuuid(puuid);
         account.setGameName(gameName);
         account.setTagLine(tagLine);
-        account.setCreatedDate(LocalDateTime.now());
         return account;
     }
 }

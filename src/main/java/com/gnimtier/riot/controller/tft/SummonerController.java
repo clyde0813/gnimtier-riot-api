@@ -15,7 +15,10 @@ public class SummonerController {
     private final SummonerService summonerService;
 
     @GetMapping("/by-puuid/{puuid}")
-    public SummonerResponseDto getSummonerByPuuid(@PathVariable("puuid") String puuid) {
-        return summonerService.getSummonerResponseDto(puuid);
+    public SummonerResponseDto getSummonerByPuuid(
+            @PathVariable("puuid") String puuid,
+            @RequestParam(value = "refresh", required = false, defaultValue = "false") boolean refresh
+    ) {
+        return summonerService.getSummonerResponseDto(puuid, refresh);
     }
 }

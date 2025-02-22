@@ -9,18 +9,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LeagueEntryRepository extends JpaRepository<LeagueEntry, Long> {
+    Optional<LeagueEntry> findById(String id);
+
     List<LeagueEntry> findAllByPuuid(String puuid);
 
     @Query("""
-    select l
-    from LeagueEntry l
-    where l.puuid in :puuids and
-    l.queueType = "RANKED_TFT"
-    order by l.tier ASC, l.rank ASC, l.leaguePoints DESC
-""")
+                select l
+                from LeagueEntry l
+                where l.puuid in :puuids
+                order by l.rankScore desc
+            """)
     Page<LeagueEntry> getSortedLeagueEntryByTier(
-        @Param("puuids") List<String> puuidList, Pageable pageable
+            @Param("puuids") List<String> puuidList, Pageable pageable
     );
 }

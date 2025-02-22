@@ -3,13 +3,16 @@ package com.gnimtier.riot.client;
 import com.gnimtier.riot.constant.RiotApiConstants;
 import com.gnimtier.riot.data.dto.riot.AccountDto;
 import com.gnimtier.riot.data.dto.riot.SummonerDto;
+import com.gnimtier.riot.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 @Component
 public class RiotAsiaApiClient {
@@ -39,6 +42,7 @@ public class RiotAsiaApiClient {
                             .build()
                     )
                     .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException(clientResponse.toString(), HttpStatus.BAD_REQUEST)))
                     .bodyToMono(AccountDto.class)
                     .block();
             return response;

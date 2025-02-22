@@ -1,12 +1,12 @@
 package com.gnimtier.riot.data.dto.tft;
 
-import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
 import com.gnimtier.riot.data.entity.tft.LeagueEntry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
@@ -15,10 +15,8 @@ import java.util.Objects;
 @Builder
 public class LeagueEntryDto {
     private String puuid;
-    private String leagueId;
-    private String SummonerId;
+    private String summonerId;
     private String queueType;
-    private int ratedRating;
     private String tier;
     private String rank;
     private int leaguePoints;
@@ -29,14 +27,18 @@ public class LeagueEntryDto {
     private Boolean inactive;
     private Boolean freshBlood;
 
-    public LeagueEntry toEntity(String puuid) {
+    public LeagueEntry toEntity(String puuid, String season) {
+        int tier = tierToInt(this.tier);
+        int rank = romanToInt(this.rank);
+        int scoreRank = scoreRank(tier, rank, this.leaguePoints);
         LeagueEntry leagueEntry = new LeagueEntry();
-        leagueEntry.setLeagueId(leagueId);
+        leagueEntry.setId(season + "-" + summonerId + "-" + queueType);
         leagueEntry.setQueueType(queueType);
-        leagueEntry.setSummonerId(SummonerId);
+        leagueEntry.setSummonerId(summonerId);
+        leagueEntry.setSeason(season);
         leagueEntry.setPuuid(puuid);
-        leagueEntry.setTier(tierToInt(tier));
-        leagueEntry.setRank(romanToInt(rank));
+        leagueEntry.setTier(tier);
+        leagueEntry.setRank(rank);
         leagueEntry.setLeaguePoints(leaguePoints);
         leagueEntry.setWins(wins);
         leagueEntry.setLosses(losses);
@@ -44,21 +46,22 @@ public class LeagueEntryDto {
         leagueEntry.setVeteran(veteran);
         leagueEntry.setInactive(inactive);
         leagueEntry.setFreshBlood(freshBlood);
+        leagueEntry.setRankScore(scoreRank);
         return leagueEntry;
     }
 
     private int tierToInt(String tier) {
         return switch (tier) {
-            case "CHALLENGER" -> 1;
-            case "GRANDMASTER" -> 2;
-            case "MASTER" -> 3;
-            case "DIAMOND" -> 4;
-            case "EMERALD" -> 5;
-            case "PLATINUM" -> 6;
-            case "GOLD" -> 7;
-            case "SILVER" -> 8;
-            case "BRONZE" -> 9;
-            case "IRON" -> 10;
+            case "CHALLENGER" -> 10;
+            case "GRANDMASTER" -> 9;
+            case "MASTER" -> 8;
+            case "DIAMOND" -> 7;
+            case "EMERALD" -> 6;
+            case "PLATINUM" -> 5;
+            case "GOLD" -> 4;
+            case "SILVER" -> 3;
+            case "BRONZE" -> 2;
+            case "IRON" -> 1;
             case null, default -> 0;
         };
     }
@@ -76,5 +79,9 @@ public class LeagueEntryDto {
             return 5;
         }
         return 0;
+    }
+
+    private int scoreRank(int tier, int rank, int leaguePoints) {
+        return tier * 100000 + rank * 10000 + leaguePoints;
     }
 }

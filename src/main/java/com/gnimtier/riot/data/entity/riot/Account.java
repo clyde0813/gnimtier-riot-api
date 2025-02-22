@@ -1,11 +1,11 @@
 package com.gnimtier.riot.data.entity.riot;
 
 import com.gnimtier.riot.data.dto.riot.AccountDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Table(name = "account")
+@EntityListeners(AuditingEntityListener.class)
 public class Account {
     @Id
     @Column(name = "puuid")
@@ -29,10 +30,7 @@ public class Account {
     @Column(name = "tag_line", nullable = false)
     private String tagLine;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @Column(name = "modified_date", nullable = true)
+    @LastModifiedDate
     private LocalDateTime modifiedDate;
 
     public AccountDto toDto() {

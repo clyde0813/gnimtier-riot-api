@@ -5,22 +5,29 @@ import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
 import com.gnimtier.riot.data.entity.riot.Summoner;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tft_league_entry")
+@Table(name = "tft_league_entry", indexes = {
+        @Index(name = "idx_league_ranking", columnList = "rank_score DESC")
+})
+@EntityListeners(AuditingEntityListener.class)
 public class LeagueEntry {
-    //LeagueEntry - 라이엇에서 식별가능한 키를 제공하지 않음
+    // season + summonerId + queueType로 유니크한 값
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    //leagueID - tier, leagueId, queue, name
-    @Column(name = "league_id")
-    private String leagueId;
+    //Custom Column
+    //season - float 형식이나 혹시 모를 상황에 대비하여 String으로 선언
+    @Column(name = "season")
+    private String season;
 
     //queueType
     @Column(name = "queue_type")
@@ -46,6 +53,11 @@ public class LeagueEntry {
     @Column(name = "league_points")
     private int leaguePoints;
 
+    //Custom Column
+    // rankScore - tier, rank, leaguePoints를 합산한 값
+    @Column(name = "rank_score")
+    private int rankScore;
+
     //wins
     @Column(name = "wins")
     private int wins;
@@ -70,6 +82,9 @@ public class LeagueEntry {
     @Column(name = "hot_streak")
     private Boolean hotStreak;
 
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
+
     public LeagueEntryResponseDto toDto() {
         LeagueEntryResponseDto dto = new LeagueEntryResponseDto();
         dto.setTier(tier);
@@ -81,8 +96,6 @@ public class LeagueEntry {
         dto.setInactive(inactive);
         dto.setFreshBlood(freshBlood);
         dto.setHotStreak(hotStreak);
-//        dto.setLeagueId(leagueId);
-//        dto.setQueueType(queueType);
         return dto;
     }
 }

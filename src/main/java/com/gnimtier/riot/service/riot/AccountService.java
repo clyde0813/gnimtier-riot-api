@@ -21,9 +21,9 @@ public class AccountService {
     }
 
 
-    public Account getByPuuid(String puuid) {
+    public Account getByPuuid(String puuid, boolean refresh) {
         Optional<Account> selectedAccount = accountRepository.findByPuuid(puuid);
-        if (selectedAccount.isEmpty()) {
+        if (selectedAccount.isEmpty() || refresh) {
             AccountDto apiResponseAccount = riotAsiaApiClient.getAccountByPuuid(puuid);
             return accountRepository.save(apiResponseAccount.toEntity());
         }
