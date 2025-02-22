@@ -38,8 +38,6 @@ public class LeaderboardService {
         responseDto.setData(summonerResponseDtoList);
         responseDto.setPageSize(sortedLeagueEntry.getSize());
         responseDto.setPage(sortedLeagueEntry.getNumber());
-        responseDto.setTotalPages(sortedLeagueEntry.getTotalPages());
-        responseDto.setTotalElements(sortedLeagueEntry.getTotalElements());
         responseDto.setHasNext(sortedLeagueEntry.hasNext());
         responseDto.setHasPrevious(sortedLeagueEntry.hasPrevious());
         LOGGER.info("[getTierLeaderboardByPuuidList] - getting tier leaderboard end");
