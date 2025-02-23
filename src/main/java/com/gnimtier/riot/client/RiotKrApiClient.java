@@ -40,7 +40,9 @@ public class RiotKrApiClient {
                         .queryParam("api_key", apiKey)
                         .build())
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException("Too Many Requests", HttpStatus.BAD_REQUEST)))
+                .onStatus(HttpStatus.TOO_MANY_REQUESTS::equals, clientResponse -> Mono.error(new CustomException("Too Many Requests", HttpStatus.BAD_REQUEST)))
+                .onStatus(HttpStatus.NOT_FOUND::equals, clientResponse -> Mono.error(new CustomException("Not Found", HttpStatus.NOT_FOUND)))
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException("Bad Request", HttpStatus.BAD_REQUEST)))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CustomException("Riot API Error", HttpStatus.BAD_REQUEST)))
                 .bodyToMono(SummonerDto.class)
                 .block();
@@ -58,7 +60,9 @@ public class RiotKrApiClient {
                         .queryParam("api_key", apiKey)
                         .build())
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException("Too Many Requests", HttpStatus.BAD_REQUEST)))
+                .onStatus(HttpStatus.TOO_MANY_REQUESTS::equals, clientResponse -> Mono.error(new CustomException("Too Many Requests", HttpStatus.BAD_REQUEST)))
+                .onStatus(HttpStatus.NOT_FOUND::equals, clientResponse -> Mono.error(new CustomException("Not Found", HttpStatus.NOT_FOUND)))
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException("Bad Request", HttpStatus.BAD_REQUEST)))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CustomException("Riot API Error", HttpStatus.BAD_REQUEST)))
                 .bodyToMono(new ParameterizedTypeReference<List<LeagueEntryDto>>() {
                 })
