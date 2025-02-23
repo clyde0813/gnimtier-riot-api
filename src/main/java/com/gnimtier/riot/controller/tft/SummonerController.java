@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +21,15 @@ public class SummonerController {
             @RequestParam(value = "refresh", required = false, defaultValue = "false") boolean refresh
     ) {
         return summonerService.getSummonerResponseDto(puuid, refresh);
+    }
+
+    @GetMapping("/by-riot-id/{gameName}/{tagLine}")
+    public SummonerResponseDto getSummonerByRiotId(
+            @PathVariable("gameName") String gameName,
+            @PathVariable("tagLine") String tagLine,
+            @RequestParam(value = "refresh", required = false, defaultValue = "false") boolean refresh
+
+    ) {
+        return summonerService.getSummonerResponseDto(gameName, tagLine, refresh);
     }
 }

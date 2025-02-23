@@ -33,7 +33,7 @@ public class LeaderboardService {
         PageableResponseDto<SummonerResponseDto> responseDto = new PageableResponseDto<>();
         List<SummonerResponseDto> summonerResponseDtoList = new ArrayList<>();
         sortedLeagueEntry.forEach(LeagueEntry -> {
-            summonerResponseDtoList.add(summonerService.getSummonerResponseDtoByLeagueEntry(LeagueEntry));
+            summonerResponseDtoList.add(summonerService.getSummonerResponseDto(LeagueEntry));
         });
         responseDto.setData(summonerResponseDtoList);
         responseDto.setPageSize(sortedLeagueEntry.getSize());

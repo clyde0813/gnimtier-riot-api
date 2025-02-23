@@ -33,16 +33,16 @@ public class LeagueService {
     private String season;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    public Map<String, LeagueEntryResponseDto> getByPuuid(String puuid, boolean refresh) {
+    public Map<String, LeagueEntryResponseDto> getLeagueEntryResponseDto(String puuid, boolean refresh) {
         String summonerId = summonerRepository
                 .findByPuuid(puuid)
                 .map(Summoner::getId)
                 .orElseThrow(() -> new CustomException("Summoner not found", HttpStatus.NOT_FOUND));
         Map<String, LeagueEntryResponseDto> leagueEntryResponseDtoMap = new HashMap<>();
         Optional<LeagueEntry> selectedLeagueEntry = leagueEntryRepository.findById(season + "-" + summonerId + "-" + "RANKED_TFT");
+        // LeagueEntry가 없거나 갱신 요청이 들어왔을때
         if (selectedLeagueEntry.isEmpty() || refresh) {
             List<LeagueEntryDto> apiResponseLeagueEntryDtoList = riotKrApiClient.getLeagueEntryBySummonerId(summonerId);
-
             // RANKED_TFT 만 처리
             apiResponseLeagueEntryDtoList
                     .stream()
@@ -52,20 +52,17 @@ public class LeagueService {
                         LeagueEntry leagueEntry = leagueEntryRepository.save(leagueEntryDto.toEntity(puuid, season));
                         LeagueEntryResponseDto leagueEntryResponseDto = leagueEntry.toDto();
                         leagueEntryResponseDtoMap.put(leagueEntry.getQueueType(), leagueEntryResponseDto);
+                        LOGGER.info("[LeagueService] - getLeagueEntryResponseDto : getting LeagueEntry from api done! - {}", leagueEntry.getPuuid());
                     });
+            return leagueEntryResponseDtoMap;
 
-            // LeagueEntry 전체 저장 삭제
-//            apiResponseLeagueEntryDtoList.forEach(leagueEntryDto -> {
-//                    LeagueEntry leagueEntry = leagueEntryRepository.save(leagueEntryDto.toEntity(puuid));
-//                    LeagueEntryResponseDto leagueEntryResponseDto = leagueEntry.toDto();
-//                    leagueEntryResponseDtoMap.put(leagueEntry.getQueueType(), leagueEntryResponseDto);
-//            });
-        } else {
-            selectedLeagueEntry.ifPresent(leagueEntry -> {
-                LeagueEntryResponseDto leagueEntryResponseDto = leagueEntry.toDto();
-                leagueEntryResponseDtoMap.put(leagueEntry.getQueueType(), leagueEntryResponseDto);
-            });
         }
+        // 데이터 존재, 갱신 요청 X
+        selectedLeagueEntry.ifPresent(leagueEntry -> {
+            LeagueEntryResponseDto leagueEntryResponseDto = leagueEntry.toDto();
+            leagueEntryResponseDtoMap.put(leagueEntry.getQueueType(), leagueEntryResponseDto);
+            LOGGER.info("[LeagueService] - getLeagueEntryResponseDto : getting LeagueEntry from DB done! - {}", leagueEntry.getPuuid());
+        });
         return leagueEntryResponseDtoMap;
     }
 }
