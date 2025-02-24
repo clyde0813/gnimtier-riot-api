@@ -11,6 +11,7 @@ import com.gnimtier.riot.data.repository.riot.AccountRepository;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;
 import com.gnimtier.riot.exception.CustomException;
 import com.gnimtier.riot.service.riot.AccountService;
+import com.gnimtier.riot.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class SummonerService {
     private final AccountService accountService;
     private final LeagueService leagueService;
+    private final RedisUtils redisUtils;
     private final SummonerRepository summonerRepository;
     private final RiotKrApiClient riotKrApiClient;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -33,6 +35,8 @@ public class SummonerService {
 
 
     public SummonerResponseDto getSummonerResponseDto(String puuid, boolean refresh) {
+        // 결과 없는 검색어 필터링
+        isBannedKeyword(puuid);
         if (refresh) {
             refresh = isRecentlyModified(accountRepository.findByPuuid(puuid));
         }
@@ -51,6 +55,8 @@ public class SummonerService {
 
 
     public SummonerResponseDto getSummonerResponseDto(String gameName, String tagLine, boolean refresh) {
+        // 결과 없는 검색어 필터링
+        isBannedKeyword(gameName + "#" + tagLine);
         if (refresh) {
             refresh = isRecentlyModified(accountRepository.findByGameNameAndTagLine(gameName, tagLine));
         }
@@ -62,6 +68,7 @@ public class SummonerService {
 
 
     public Summoner getSummonerByPuuid(String puuid, boolean refresh) {
+        LOGGER.info("[SummonerService] - getSummonerByPuuid : Getting Summoner - {}", puuid);
         Optional<Summoner> selectedSummoner = summonerRepository.findByPuuid(puuid);
         // summoner
         if (selectedSummoner.isEmpty() || refresh) {
@@ -102,5 +109,11 @@ public class SummonerService {
             throw new CustomException("Too Many Requests", HttpStatus.TOO_MANY_REQUESTS);
         }
         return true;
+    }
+
+    public void isBannedKeyword(String keyword) {
+        if (redisUtils.existsByKeyword(keyword)) {
+            throw new CustomException("Not Found (Banned)", HttpStatus.NOT_FOUND);
+        }
     }
 }

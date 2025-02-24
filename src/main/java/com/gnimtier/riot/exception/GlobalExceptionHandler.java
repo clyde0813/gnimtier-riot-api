@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -22,11 +23,7 @@ public class GlobalExceptionHandler {
         LOGGER.error(ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of(
-                        "timestamp", LocalDateTime.now(),
-                        "message", "An unexpected error occurred",
-                        "details", ex.getMessage()
-                ));
+                .body(Map.of("timestamp", LocalDateTime.now(), "message", "An unexpected error occurred", "details", ex.getMessage()));
     }
 
     @ExceptionHandler(CustomException.class)
@@ -34,12 +31,16 @@ public class GlobalExceptionHandler {
         LOGGER.error(ex.getMessage());
         return ResponseEntity
                 .status(ex.getStatus())
-                .body(Map.of(
-                        "status", ex
-                                .getStatus()
-                                .value(),
-                        "timestamp", LocalDateTime.now(),
-                        "message", ex.getMessage()
-                ));
+                .body(Map.of("status", ex
+                        .getStatus()
+                        .value(), "timestamp", LocalDateTime.now(), "message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(NoSuchAlgorithmException.class)
+    public ResponseEntity<Object> handleNoSuchAlgorithmException(NoSuchAlgorithmException ex) {
+        LOGGER.error(ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("timestamp", LocalDateTime.now(), "message", "An unexpected error occurred", "details", ex.getMessage()));
     }
 }

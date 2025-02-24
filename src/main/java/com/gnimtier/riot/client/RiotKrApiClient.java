@@ -5,7 +5,11 @@ import com.gnimtier.riot.constant.SummonerApiConstants;
 import com.gnimtier.riot.constant.tft.TftLeagueApiConstants;
 import com.gnimtier.riot.data.dto.riot.SummonerDto;
 import com.gnimtier.riot.data.dto.tft.LeagueEntryDto;
+import com.gnimtier.riot.data.entity.riot.Account;
 import com.gnimtier.riot.exception.CustomException;
+import com.gnimtier.riot.service.riot.AccountService;
+import com.gnimtier.riot.utils.RedisUtils;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,16 +23,15 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class RiotKrApiClient {
     private final WebClient webClient;
+    private final AccountService accountService;
+    private final RedisUtils redisUtils;
     private final Logger LOGGER = LoggerFactory.getLogger(RiotKrApiClient.class);
 
     @Value("${riot.api.key}")
     String apiKey;
-
-    public RiotKrApiClient(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
-    }
 
     public SummonerDto getSummonerByPuuid(String puuid) {
         SummonerDto response = webClient
@@ -41,7 +44,14 @@ public class RiotKrApiClient {
                         .build())
                 .retrieve()
                 .onStatus(HttpStatus.TOO_MANY_REQUESTS::equals, clientResponse -> Mono.error(new CustomException("Too Many Requests", HttpStatus.BAD_REQUEST)))
-                .onStatus(HttpStatus.NOT_FOUND::equals, clientResponse -> Mono.error(new CustomException("Not Found", HttpStatus.NOT_FOUND)))
+                .onStatus(HttpStatus.NOT_FOUND::equals, clientResponse -> {
+                    Account account = accountService.getAccount(puuid, false);
+                    // Redis에 검색 결과 없음 상태 저장
+                    redisUtils.setKeyword(account.getGameName() + "#" + account.getTagLine());
+                    redisUtils.setKeyword(puuid);
+                    // 예외 반환
+                    return Mono.error(new CustomException("Not Found", HttpStatus.NOT_FOUND));
+                })
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException("Bad Request", HttpStatus.BAD_REQUEST)))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CustomException("Riot API Error", HttpStatus.BAD_REQUEST)))
                 .bodyToMono(SummonerDto.class)

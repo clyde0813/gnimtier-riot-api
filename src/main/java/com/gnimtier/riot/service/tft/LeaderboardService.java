@@ -6,6 +6,7 @@ import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
 import com.gnimtier.riot.data.entity.tft.LeagueEntry;
 import com.gnimtier.riot.data.repository.tft.LeagueEntryRepository;
 import com.gnimtier.riot.service.riot.AccountService;
+import com.gnimtier.riot.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +22,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LeaderboardService {
     private final SummonerService summonerService;
+    private final RedisUtils redisUtils;
     private final LeagueEntryRepository leagueEntryRepository;
 
     private final Logger LOGGER = LoggerFactory.getLogger(LeaderboardService.class);
-    private final AccountService accountService;
 
     public PageableResponseDto<SummonerResponseDto> getTierLeaderboardByPuuidList(PageableRequestDto<String> puuidListRequestDto) {
         LOGGER.info("[getTierLeaderboardByPuuidList] - getting tier leaderboard");
+
+        //Redis Cache 확인
+        LOGGER.info("[getTierLeaderboardByPuuidList] - checking Redis");
+        PageableResponseDto<SummonerResponseDto> redisDto = redisUtils.getLeaderboard(puuidListRequestDto.toString());
+        if (redisDto != null) {
+            LOGGER.info("[getTierLeaderboardByPuuidList] - cache found");
+            //Redis Cache 있음
+            return redisDto;
+        }
+
+        //Redis Cache 없음
+        LOGGER.info("[getTierLeaderboardByPuuidList] - cache not found");
         Pageable pageable = PageRequest.of(puuidListRequestDto.getPage(), puuidListRequestDto.getPageSize());
         Page<LeagueEntry> sortedLeagueEntry = leagueEntryRepository.getSortedLeagueEntryByTier(puuidListRequestDto.getData(), pageable);
         PageableResponseDto<SummonerResponseDto> responseDto = new PageableResponseDto<>();
@@ -40,6 +53,11 @@ public class LeaderboardService {
         responseDto.setPage(sortedLeagueEntry.getNumber());
         responseDto.setHasNext(sortedLeagueEntry.hasNext());
         responseDto.setHasPrevious(sortedLeagueEntry.hasPrevious());
+
+        LOGGER.info("[getTierLeaderboardByPuuidList] - setting Redis");
+        redisUtils.setLeaderboard(puuidListRequestDto.toString(), responseDto);
+        LOGGER.info("[getTierLeaderboardByPuuidList] - set Redis");
+
         LOGGER.info("[getTierLeaderboardByPuuidList] - getting tier leaderboard end");
         return responseDto;
     }
