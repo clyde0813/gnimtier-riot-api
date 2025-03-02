@@ -82,6 +82,6 @@ public class LeagueEntryDto {
     }
 
     private int scoreRank(int tier, int rank, int leaguePoints) {
-        return tier * 100000 + rank * 10000 + leaguePoints;
+        return tier * 100000 + (10 - rank) * 10000 + leaguePoints;
     }
 }
