@@ -3,17 +3,15 @@ package com.gnimtier.riot.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gnimtier.riot.data.dto.tft.PageableResponseDto;
-import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
+import com.gnimtier.riot.data.dto.gnt.PageableResponseDto;
+import com.gnimtier.riot.data.dto.tft.SummonerResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
 @Component

@@ -1,8 +1,8 @@
 package com.gnimtier.riot.controller.tft;
 
-import com.gnimtier.riot.data.dto.tft.PageableRequestDto;
-import com.gnimtier.riot.data.dto.tft.PageableResponseDto;
-import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
+import com.gnimtier.riot.data.dto.gnt.PageableRequestDto;
+import com.gnimtier.riot.data.dto.gnt.PageableResponseDto;
+import com.gnimtier.riot.data.dto.tft.SummonerResponseDto;
 import com.gnimtier.riot.service.tft.LeaderboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

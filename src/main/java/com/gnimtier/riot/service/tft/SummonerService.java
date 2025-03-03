@@ -2,8 +2,8 @@ package com.gnimtier.riot.service.tft;
 
 import com.gnimtier.riot.client.RiotKrApiClient;
 import com.gnimtier.riot.data.dto.riot.SummonerDto;
-import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
-import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
+import com.gnimtier.riot.data.dto.tft.LeagueEntryResponseDto;
+import com.gnimtier.riot.data.dto.tft.SummonerResponseDto;
 import com.gnimtier.riot.data.entity.riot.Account;
 import com.gnimtier.riot.data.entity.riot.Summoner;
 import com.gnimtier.riot.data.entity.tft.LeagueEntry;

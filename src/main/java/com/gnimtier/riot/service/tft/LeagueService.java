@@ -1,9 +1,8 @@
 package com.gnimtier.riot.service.tft;
 
-import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.gnimtier.riot.client.RiotKrApiClient;
 import com.gnimtier.riot.data.dto.tft.LeagueEntryDto;
-import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
+import com.gnimtier.riot.data.dto.tft.LeagueEntryResponseDto;
 import com.gnimtier.riot.data.entity.riot.Summoner;
 import com.gnimtier.riot.data.entity.tft.LeagueEntry;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor

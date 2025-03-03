@@ -1,6 +1,5 @@
 package com.gnimtier.riot.data.repository.tft;
 
-import com.gnimtier.riot.data.entity.riot.Summoner;
 import com.gnimtier.riot.data.entity.tft.LeagueEntry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,13 +15,22 @@ public interface LeagueEntryRepository extends JpaRepository<LeagueEntry, Long> 
 
     List<LeagueEntry> findAllByPuuid(String puuid);
 
+
+    @Query(value = """
+                select ranking from (
+                select puuid, rank() over (order by rank_score desc) as ranking
+                from tft_league_entry
+                where puuid in :puuidList
+                ) as ranking_table
+                where puuid = :puuid
+            """, nativeQuery = true)
+    Integer getTierRankByPuuidList(List<String> puuidList, String puuid);
+
     @Query("""
                 select l
                 from LeagueEntry l
                 where l.puuid in :puuids
                 order by l.rankScore desc
             """)
-    Page<LeagueEntry> getSortedLeagueEntryByTier(
-            @Param("puuids") List<String> puuidList, Pageable pageable
-    );
+    Page<LeagueEntry> getSortedLeagueEntryByTier(@Param("puuids") List<String> puuidList, Pageable pageable);
 }

@@ -1,9 +1,10 @@
-package com.gnimtier.riot.data.dto.tft.response;
+package com.gnimtier.riot.data.dto.tft;
 
 import com.gnimtier.riot.data.dto.riot.AccountDto;
-import com.gnimtier.riot.data.entity.riot.Account;
-import com.gnimtier.riot.data.entity.riot.Summoner;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Map;

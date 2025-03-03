@@ -1,32 +1,23 @@
 package com.gnimtier.riot.service.tft;
 
 import com.gnimtier.riot.client.RiotKrApiClient;
-import com.gnimtier.riot.data.dto.riot.SummonerDto;
-import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
-import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
 import com.gnimtier.riot.data.entity.riot.Account;
-import com.gnimtier.riot.data.entity.riot.Summoner;
-import com.gnimtier.riot.data.entity.tft.LeagueEntry;
 import com.gnimtier.riot.data.repository.riot.AccountRepository;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;
 import com.gnimtier.riot.exception.CustomException;
 import com.gnimtier.riot.service.riot.AccountService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("SummonerService 단위 테스트")

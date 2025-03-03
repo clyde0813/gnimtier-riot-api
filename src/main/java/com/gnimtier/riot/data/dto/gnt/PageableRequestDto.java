@@ -1,4 +1,4 @@
-package com.gnimtier.riot.data.dto.tft;
+package com.gnimtier.riot.data.dto.gnt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

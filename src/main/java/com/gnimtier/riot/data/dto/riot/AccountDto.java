@@ -1,14 +1,10 @@
 package com.gnimtier.riot.data.dto.riot;
 
 import com.gnimtier.riot.data.entity.riot.Account;
-import com.gnimtier.riot.data.repository.riot.AccountRepository;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor

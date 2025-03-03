@@ -1,11 +1,10 @@
 package com.gnimtier.riot.service.tft;
 
-import com.gnimtier.riot.data.dto.tft.PageableRequestDto;
-import com.gnimtier.riot.data.dto.tft.PageableResponseDto;
-import com.gnimtier.riot.data.dto.tft.response.SummonerResponseDto;
+import com.gnimtier.riot.data.dto.gnt.PageableRequestDto;
+import com.gnimtier.riot.data.dto.gnt.PageableResponseDto;
+import com.gnimtier.riot.data.dto.tft.SummonerResponseDto;
 import com.gnimtier.riot.data.entity.tft.LeagueEntry;
 import com.gnimtier.riot.data.repository.tft.LeagueEntryRepository;
-import com.gnimtier.riot.service.riot.AccountService;
 import com.gnimtier.riot.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

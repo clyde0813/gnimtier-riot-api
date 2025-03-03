@@ -1,10 +1,11 @@
 package com.gnimtier.riot.data.entity.tft;
 
-import com.gnimtier.riot.data.dto.tft.LeagueEntryDto;
-import com.gnimtier.riot.data.dto.tft.response.LeagueEntryResponseDto;
-import com.gnimtier.riot.data.entity.riot.Summoner;
+import com.gnimtier.riot.data.dto.tft.LeagueEntryResponseDto;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
