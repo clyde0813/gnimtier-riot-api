@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
         @Index(name = "idx_league_ranking", columnList = "rank_score DESC")
 })
 @EntityListeners(AuditingEntityListener.class)
-public class LeagueEntry {
+public class TFTLeagueEntry {
     // season + summonerId + queueType로 유니크한 값
     @Id
     private String id;

@@ -22,10 +22,10 @@ public class LeaderboardController {
         PageableResponseDto<SummonerResponseDto> summoners;
         switch (puuidListRequestDto.getSortBy()) {
             case "tier":
-                summoners = leaderboardService.getTierLeaderboardByPuuidList(puuidListRequestDto);
+                summoners = leaderboardService.getRankLeaderboard(puuidListRequestDto);
                 break;
             default:
-                summoners = leaderboardService.getTierLeaderboardByPuuidList(puuidListRequestDto);
+                summoners = leaderboardService.getRankLeaderboard(puuidListRequestDto);
                 break;
         }
         return summoners;

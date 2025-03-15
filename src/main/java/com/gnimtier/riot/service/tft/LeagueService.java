@@ -1,10 +1,10 @@
 package com.gnimtier.riot.service.tft;
 
 import com.gnimtier.riot.client.RiotKrApiClient;
-import com.gnimtier.riot.data.dto.tft.LeagueEntryDto;
 import com.gnimtier.riot.data.dto.tft.LeagueEntryResponseDto;
+import com.gnimtier.riot.data.dto.tft.TFTLeagueEntryDto;
 import com.gnimtier.riot.data.entity.riot.Summoner;
-import com.gnimtier.riot.data.entity.tft.LeagueEntry;
+import com.gnimtier.riot.data.entity.tft.TFTLeagueEntry;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;
 import com.gnimtier.riot.data.repository.tft.LeagueEntryRepository;
 import com.gnimtier.riot.exception.CustomException;
@@ -37,17 +37,18 @@ public class LeagueService {
                 .map(Summoner::getId)
                 .orElseThrow(() -> new CustomException("Summoner not found", HttpStatus.NOT_FOUND));
         Map<String, LeagueEntryResponseDto> leagueEntryResponseDtoMap = new HashMap<>();
-        Optional<LeagueEntry> selectedLeagueEntry = leagueEntryRepository.findById(season + "-" + summonerId + "-" + "RANKED_TFT");
+        Optional<TFTLeagueEntry> selectedLeagueEntry = leagueEntryRepository.findById(season + "-" + summonerId + "-" + "RANKED_TFT");
+
         // LeagueEntry가 없거나 갱신 요청이 들어왔을때
         if (selectedLeagueEntry.isEmpty() || refresh) {
-            List<LeagueEntryDto> apiResponseLeagueEntryDtoList = riotKrApiClient.getLeagueEntryBySummonerId(summonerId);
+            List<TFTLeagueEntryDto> apiResponseLeagueEntryDtoList = riotKrApiClient.getLeagueEntryBySummonerId(summonerId);
             // RANKED_TFT 만 처리
             apiResponseLeagueEntryDtoList
                     .stream()
                     .filter(dto -> "RANKED_TFT".equals(dto.getQueueType()))
                     .findFirst() // 첫 번째 요소만 처리
                     .ifPresent(leagueEntryDto -> {
-                        LeagueEntry leagueEntry = leagueEntryRepository.save(leagueEntryDto.toEntity(puuid, season));
+                        TFTLeagueEntry leagueEntry = leagueEntryRepository.save(leagueEntryDto.toEntity(puuid, season));
                         LeagueEntryResponseDto leagueEntryResponseDto = leagueEntry.toDto();
                         leagueEntryResponseDtoMap.put(leagueEntry.getQueueType(), leagueEntryResponseDto);
                         LOGGER.info("[LeagueService] - getLeagueEntryResponseDto : getting LeagueEntry from api done! - {}", leagueEntry.getPuuid());

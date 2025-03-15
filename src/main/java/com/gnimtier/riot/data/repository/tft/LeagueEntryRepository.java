@@ -1,6 +1,8 @@
 package com.gnimtier.riot.data.repository.tft;
 
-import com.gnimtier.riot.data.entity.tft.LeagueEntry;
+import com.gnimtier.riot.data.entity.riot.Account;
+import com.gnimtier.riot.data.entity.riot.Summoner;
+import com.gnimtier.riot.data.entity.tft.TFTLeagueEntry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,10 +12,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface LeagueEntryRepository extends JpaRepository<LeagueEntry, Long> {
-    Optional<LeagueEntry> findById(String id);
+public interface LeagueEntryRepository extends JpaRepository<TFTLeagueEntry, Long> {
+    Optional<TFTLeagueEntry> findById(String id);
 
-    List<LeagueEntry> findAllByPuuid(String puuid);
+    List<TFTLeagueEntry> findAllByPuuid(String puuid);
 
 
     @Query(value = """
@@ -26,11 +28,12 @@ public interface LeagueEntryRepository extends JpaRepository<LeagueEntry, Long> 
             """, nativeQuery = true)
     Integer getTierRankByPuuidList(List<String> puuidList, String puuid);
 
+    @Deprecated
     @Query("""
                 select l
-                from LeagueEntry l
+                from TFTLeagueEntry l
                 where l.puuid in :puuids
                 order by l.rankScore desc
             """)
-    Page<LeagueEntry> getSortedLeagueEntryByTier(@Param("puuids") List<String> puuidList, Pageable pageable);
+    Page<TFTLeagueEntry> getSortedLeagueEntryByTier(@Param("puuids") List<String> puuidList, Pageable pageable);
 }

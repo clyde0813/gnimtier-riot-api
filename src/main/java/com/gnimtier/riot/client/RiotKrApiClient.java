@@ -4,7 +4,7 @@ import com.gnimtier.riot.constant.RiotApiConstants;
 import com.gnimtier.riot.constant.SummonerApiConstants;
 import com.gnimtier.riot.constant.tft.TftLeagueApiConstants;
 import com.gnimtier.riot.data.dto.riot.SummonerDto;
-import com.gnimtier.riot.data.dto.tft.LeagueEntryDto;
+import com.gnimtier.riot.data.dto.tft.TFTLeagueEntryDto;
 import com.gnimtier.riot.data.entity.riot.Account;
 import com.gnimtier.riot.exception.CustomException;
 import com.gnimtier.riot.service.riot.AccountService;
@@ -60,8 +60,8 @@ public class RiotKrApiClient {
         return response;
     }
 
-    public List<LeagueEntryDto> getLeagueEntryBySummonerId(String summonerId) {
-        List<LeagueEntryDto> response = webClient
+    public List<TFTLeagueEntryDto> getLeagueEntryBySummonerId(String summonerId) {
+        List<TFTLeagueEntryDto> response = webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
@@ -74,7 +74,7 @@ public class RiotKrApiClient {
                 .onStatus(HttpStatus.NOT_FOUND::equals, clientResponse -> Mono.error(new CustomException("Not Found", HttpStatus.NOT_FOUND)))
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException("Bad Request", HttpStatus.BAD_REQUEST)))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CustomException("Riot API Error", HttpStatus.BAD_REQUEST)))
-                .bodyToMono(new ParameterizedTypeReference<List<LeagueEntryDto>>() {
+                .bodyToMono(new ParameterizedTypeReference<List<TFTLeagueEntryDto>>() {
                 })
                 .block();
         LOGGER.info("RiotKrApiClient - getLeagueEntryBySummonerId done!");

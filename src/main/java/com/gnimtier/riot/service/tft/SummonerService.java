@@ -6,7 +6,7 @@ import com.gnimtier.riot.data.dto.tft.LeagueEntryResponseDto;
 import com.gnimtier.riot.data.dto.tft.SummonerResponseDto;
 import com.gnimtier.riot.data.entity.riot.Account;
 import com.gnimtier.riot.data.entity.riot.Summoner;
-import com.gnimtier.riot.data.entity.tft.LeagueEntry;
+import com.gnimtier.riot.data.entity.tft.TFTLeagueEntry;
 import com.gnimtier.riot.data.repository.riot.AccountRepository;
 import com.gnimtier.riot.data.repository.riot.SummonerRepository;
 import com.gnimtier.riot.exception.CustomException;
@@ -70,7 +70,8 @@ public class SummonerService {
     }
 
     //Leaderboard LeagueEntry 재사용을 위한 method
-    public SummonerResponseDto getSummonerResponseDto(LeagueEntry leagueEntry) {
+    @Deprecated
+    public SummonerResponseDto getSummonerResponseDto(TFTLeagueEntry leagueEntry) {
         String redisKey = leagueEntry.getPuuid();
 
         //Redis에 캐싱된 데이터가 있는지 확인

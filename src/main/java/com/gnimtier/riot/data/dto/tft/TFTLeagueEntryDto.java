@@ -1,6 +1,6 @@
 package com.gnimtier.riot.data.dto.tft;
 
-import com.gnimtier.riot.data.entity.tft.LeagueEntry;
+import com.gnimtier.riot.data.entity.tft.TFTLeagueEntry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LeagueEntryDto {
+public class TFTLeagueEntryDto {
     private String puuid;
     private String summonerId;
     private String queueType;
@@ -26,11 +26,11 @@ public class LeagueEntryDto {
     private Boolean inactive;
     private Boolean freshBlood;
 
-    public LeagueEntry toEntity(String puuid, String season) {
+    public TFTLeagueEntry toEntity(String puuid, String season) {
         int tier = tierToInt(this.tier);
         int rank = romanToInt(this.rank);
         int scoreRank = scoreRank(tier, rank, this.leaguePoints);
-        LeagueEntry leagueEntry = new LeagueEntry();
+        TFTLeagueEntry leagueEntry = new TFTLeagueEntry();
         leagueEntry.setId(season + "-" + summonerId + "-" + queueType);
         leagueEntry.setQueueType(queueType);
         leagueEntry.setSummonerId(summonerId);
@@ -46,6 +46,26 @@ public class LeagueEntryDto {
         leagueEntry.setInactive(inactive);
         leagueEntry.setFreshBlood(freshBlood);
         leagueEntry.setRankScore(scoreRank);
+        return leagueEntry;
+    }
+
+    public static TFTLeagueEntry nullToEntity(String puuid, String season, String summonerId, String queueType) {
+        TFTLeagueEntry leagueEntry = new TFTLeagueEntry();
+        leagueEntry.setId(season + "-" + summonerId + "-" + queueType);
+        leagueEntry.setQueueType(queueType);
+        leagueEntry.setSummonerId(summonerId);
+        leagueEntry.setSeason(season);
+        leagueEntry.setPuuid(puuid);
+        leagueEntry.setTier(0);
+        leagueEntry.setRank(0);
+        leagueEntry.setLeaguePoints(0);
+        leagueEntry.setWins(0);
+        leagueEntry.setLosses(0);
+        leagueEntry.setHotStreak(false);
+        leagueEntry.setVeteran(false);
+        leagueEntry.setInactive(false);
+        leagueEntry.setFreshBlood(false);
+        leagueEntry.setRankScore(0);
         return leagueEntry;
     }
 
